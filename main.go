@@ -1,7 +1,7 @@
 package main
 
 import (
-	"net/http"
+	"webScraperBackend/controllers"
 	"webScraperBackend/initializers"
 	"github.com/gin-gonic/gin"
 )
@@ -13,10 +13,6 @@ func init() {
 
 func main() {
   r := gin.Default()
-  r.GET("/ping", func(c *gin.Context) {
-    c.JSON(http.StatusOK, gin.H{
-      "message": "Hello World!",
-    })
-  })
+  r.GET("/", controllers.SitesCreate)
   r.Run()
 }
