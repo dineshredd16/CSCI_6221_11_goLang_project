@@ -2,29 +2,63 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"net/http"
+	"regexp"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
 func main() {
-	// URL of the website to scrape
-	url := "https://www.example.com"
-
-	// Use goquery to fetch the HTML of the website
-	doc, err := goquery.NewDocument(url)
+	url := "https://www.cnbc.com/2023/01/20/google-to-lay-off-12000-people-memo-from-ceo-sundar-pichai-says.html?&qsearchterm=google%20layoff"
+	res, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error fetching the URL:", err)
+		return
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		fmt.Println("Error: Non-200 status code returned")
+		return
 	}
 
-	// Use goquery to select and extract data from the website
-	doc.Find("div.product").Each(func(i int, s *goquery.Selection) {
-		productName := s.Find("h3").Text()
-		productPrice := s.Find("span.price").Text()
+	// Load the HTML document
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		fmt.Println("Error loading the HTML:", err)
+		return
+	}
 
-		fmt.Printf("Product %d: %s - %s\n", i+1, productName, productPrice)
-	})
+	// Find the header text
+	header := doc.Find("header h1").Text()
+	if header == "" {
+		fmt.Println("Header not found on the page")
+		return
+	}
+
+	// Extract the company name and job cuts
+	var companyName string
+	var jobCuts int
+	if strings.Contains(header, "Google") {
+		companyName = "Google"
+		if strings.Contains(header, "lay off") {
+			// Extract the number of job cuts using a regular expression
+			re := regexp.MustCompile("([0-9]+),([0-9]+)")
+			n := re.FindString(header)
+			fmt.Println("Match:", n)
+			n = strings.Replace(n, ",", "", -1)
+			fmt.Sscanf(n, "%d", &jobCuts)
+		}
+	} else {
+		fmt.Println("Company not found on the page")
+		return
+	}
+
+	// Print the results
+	fmt.Println("Company Name:", companyName)
+	fmt.Println("Number of Job Cuts:", jobCuts)
 }
+
 
 
 '''
