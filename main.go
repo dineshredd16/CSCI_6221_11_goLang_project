@@ -14,5 +14,7 @@ package main
   func main() {
     r := gin.Default()
     r.GET("/", controllers.SitesCreate)
+    r.POST("/signup", controllers.SignUp)
+    r.POST("/login", controllers.Login)
     r.Run()
   }

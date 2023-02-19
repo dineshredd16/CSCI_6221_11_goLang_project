@@ -2,6 +2,8 @@ module webScraperBackend
 
 go 1.19
 
+require github.com/golang-jwt/jwt v3.2.2+incompatible
+
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
@@ -20,6 +22,7 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/goccy/go-json v0.10.0 // indirect
 	github.com/gocolly/colly v1.2.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.4.3 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
