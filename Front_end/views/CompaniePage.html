@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../ultils/elementUi/index.css" type="text/css" rel="stylesheet"/>
+    <link href="../style/homePage.css" type="text/css" rel="stylesheet"/>
+    <link href="../style/index.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+    <div id="Companie">
+        <div>Companies are in reverse chronological order. View site on a desktop to sort, filter, search.</div>
+
+        <div style="margin: 10px 20px;">
+            <el-table 
+                border 
+                ref="multipleTable" 
+                :data="tableList" 
+                row-key="getRowKey"
+                highlight-current-row
+                v-if="(tableList.length > 0)"
+                :fit="true" 
+                style="width: 100%; margin-top: 30px;">
+                <el-table-column type="selection" width="50" reserve-selection=""></el-table-column>
+                <el-table-column prop="Company" label="Company" width="150" class-name="bg_blue"></el-table-column>
+                <el-table-column prop="Location" label="Location" width="120"> </el-table-column>
+                <el-table-column prop="LaidOff" label="Laid Off" width="140"> </el-table-column>
+                <el-table-column prop="Date" label="Date" width="140"> </el-table-column>
+                <el-table-column prop="Industry" label="Industry" width="140"> </el-table-column>
+                <el-table-column prop="Source" label="Source" width="140"> </el-table-column>
+                <el-table-column prop="Source" label="Country" width="140"> </el-table-column>
+                <el-table-column fixed="right" label="Oprations" width="300">
+                  <template slot-scope="scope">
+                    <el-button @click="checkLocation(scope.$index,scope.row)" type="text" size="small">Location Tracking</el-button>
+                    <el-button @click="checkDetails(scope.$index,scope.row)" type="text" size="small">Asset Details</el-button>
+                    <el-button @click="editClick(scope.$index,scope.row)" type="text" size="small">Edit</el-button>
+                    <el-button @click="deleteClick(scope.$index,scope.row)" type="text" size="small">Delete</el-button>
+                  </template>
+                </el-table-column>
+            </el-table>
+        </div>
+    </div>
+
+
+
+<script src="../ultils/vue/vue.js"></script>
+<script src="../ultils/elementUi/index.js"></script>
+<script src="../js/CompaniesPage.js"></script>
+
+</body>
+</html>

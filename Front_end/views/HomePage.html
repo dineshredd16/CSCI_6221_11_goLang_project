@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link href="../ultils/elementUi/index.css" type="text/css" rel="stylesheet"/>
+  <link href="../style/homePage.css" type="text/css" rel="stylesheet"/>
+  <link href="../style/index.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+     <div id="FinalProject">
+      <Head-Con></Head-Con>
+      <div class="tabs" style="height: 800px;">
+        <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
+
+            <el-tab-pane
+                v-for="item in list" 
+                :key="item.label" 
+                :label="item.label" 
+                :value="item.value" 
+                :name="item.value"
+                
+                >
+            </el-tab-pane>
+            <iframe id="mainContent" width="100%" v-bind:height="contentListHeight" frameborder="no" src="./CompaniePage.html"></iframe>
+
+        </el-tabs>
+
+        <!-- <iframe id="mainContent" width="100%" v-bind:height="contentListHeight" frameborder="no" src="./CompaniePage.html"></iframe> -->
+    
+      </div>
+    </div>
+
+    <template id="header">
+        <div>
+            <div class="header">
+                <ul class="groupInfo">
+                    <li><p>CSCI 6221: Advanced Software Paradigms</p></li>
+                    <li><span style="background-color: #c74410;"></span></li>
+                    <li><p>Group Members: Tony Yang, Denish Reddy, Rui Liu</p></li>
+                </ul>
+            </div>
+            <div class="description">
+                <ul>
+                    <li><span style="color:rgb(53, 167, 205); font-size:30px;font-weight: bold;">340</span> tech companies w/ layoffs ∙ <span style="color:rgb(53, 167, 205);font-size:30px; font-weight: bold;">101807</span> employees laid off ∙
+                        <el-select
+                          v-model="selectValue"
+                          placeholder="Select"
+                          style="margin-left: 6px;"
+                          >
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                          </el-select>
+                    </li>
+                    <li><span style="color: #d03f05; font-weight: bold;">[LIVE]</span> Welcome! I’m a startup founder that’s been tracking tech layoffs since COVID-19. Let me know if you see anything missing!</li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+        <!-- <div class="divider"></div> -->
+    </template>
+
+<script src="../ultils/vue/vue.js"></script>
+<script src="../ultils/elementUi/index.js"></script>
+<script src="../js/HomePage.js"></script>
+</body>
+
+
+</html>

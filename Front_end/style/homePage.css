@@ -1,0 +1,37 @@
+.header {
+    margin: 30px auto;
+    width: 70%;
+    height:60px;
+    line-height: 30px;
+    border-bottom: solid 2px rgb(239, 236, 236);
+}
+.header ul li{
+    /* float: left; */
+    list-style: none;
+  }
+
+.divider{
+    width: 100%;
+    border-bottom: solid 2px #c74410;
+}
+
+#FinalProject .tabs {
+    margin: 30px auto;
+    width: 70%;
+}
+
+.description {
+    margin: 0px auto 50px;
+    width: 70%;
+    height:40px;
+    line-height: 30px;
+}
+
+.description ul li{
+    list-style: none;
+}
+
+.el-tabs__nav div{
+    font-weight: bold;
+    
+}
