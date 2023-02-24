@@ -7,15 +7,11 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
+	"strings"
 )
 
-const (
-	baseURL    = "https://www.cnbc.com/search/"
-	queryParam = "Google Layoff"
-	searchTerm = "Google Layoff"
-	source     = ""
-	typeParam  = ""
-)
+const baseURL = "https://api.queryly.com/cnbc/json.aspx"
 
 type SearchResult struct {
 	Results []struct {
@@ -27,63 +23,89 @@ type SearchResult struct {
 }
 
 func main() {
-	baseURL := "https://api.queryly.com/cnbc/json.aspx"
-	queryParams := url.Values{
-		"queryly_key":       {"31a35d40a9a64ab3"},
-		"query":             {"google" + " layoff OR " + "google" + " layoffs"},
-		"endindex":          {"0"},
-		"batchsize":         {"100"},
-		"callback":          {""},
-		"showfaceted":       {"true"},
-		"timezoneoffset":    {"-120"},
-		"facetedfields":     {"formats"},
-		"facetedkey":        {"formats|"},
-		"facetedvalue":      {"!Press Release|"},
-		"needtoptickers":    {"1"},
-		"additionalindexes": {"4cd6f71fbf22424d,937d600b0d0d4e23,3bfbe40caee7443e,626fdfcd96444f28"},
-	}
+	// List of company names to search for
+	companies := []string{"Google", "Apple", "Meta", "Microsoft"}
 
-	var allin [][]string
-	for page := 0; page < 11; page++ {
-		fmt.Printf("Extracting Page# %d\n", page+1)
-		queryParams.Set("endindex", fmt.Sprintf("%d", page*100))
-		resp, err := http.Get(baseURL + "?" + queryParams.Encode())
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		defer resp.Body.Close()
+	// Similar words to include in the search query
+	similarWords := []string{"layoff"}
 
-		var result SearchResult
-		err = json.NewDecoder(resp.Body).Decode(&result)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		for _, item := range result.Results {
-			allin = append(allin, []string{item.Title, item.Date, item.Url, item.Desc})
-		}
-	}
-
-	// Create a new CSV file and write the data to it
-	filePath := "C:/Users/15716/Desktop/6212/search_results.csv"
-	file, err := os.Create(filePath)
+	// Open CSV file for writing
+	file, err := os.Create("search_results.csv")
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		return
 	}
 	defer file.Close()
 
+	// Create a CSV writer
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	// Write the header row
-	header := []string{"Title", "Date", "Url", "Description"}
-	writer.Write(header)
+	// Write header row to CSV file
+	writer.Write([]string{"Company", "Title", "Date", "URL", "Description"})
 
-	// Write the data rows
-	for _, row := range allin {
-		writer.Write(row)
+	// Loop through companies and search for "layoff" and company name on CNBC website
+	for _, company := range companies {
+		// Build query parameters
+		queryParams := url.Values{
+			"queryly_key":       {"31a35d40a9a64ab3"},
+			"query":             {fmt.Sprintf("%s %s", strings.Join(similarWords, " "), company)},
+			"endindex":          {"0"},
+			"batchsize":         {"100"},
+			"callback":          {""},
+			"showfaceted":       {"true"},
+			"timezoneoffset":    {"-120"},
+			"facetedfields":     {"formats"},
+			"facetedkey":        {"formats|"},
+			"facetedvalue":      {"!Press Release|"},
+			"needtoptickers":    {"1"},
+			"additionalindexes": {"4cd6f71fbf22424d,937d600b0d0d4e23,3bfbe40caee7443e,626fdfcd96444f28"},
+			"fromdate":          {"-12m"},
+		}
+
+		// Make request to CNBC API
+		for page := 0; page < 11; page++ {
+			fmt.Printf("Extracting Page# %d for %s\n", page+1, company)
+			queryParams.Set("endindex", fmt.Sprintf("%d", page*100))
+			resp, err := http.Get(baseURL + "?" + queryParams.Encode())
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			defer resp.Body.Close()
+
+			// Parse response into SearchResult struct
+			var result SearchResult
+			err = json.NewDecoder(resp.Body).Decode(&result)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			/*
+				// Write each result to CSV file
+				for _, item := range result.Results {
+					writer.Write([]string{company, item.Title, item.Date, item.Url, item.Desc})
+				}
+			*/
+			// Write each result to CSV file
+			for _, item := range result.Results {
+				// Extract the number of people affected from the description
+				var numPeople string
+				numPeopleRegex := regexp.MustCompile(`[0-9]+([,.][0-9]+)*(\s)?(thousand|million|billion)?(\s)?(people|employees|workers|staff)`)
+				match := numPeopleRegex.FindStringSubmatch(item.Desc)
+				if len(match) > 0 {
+					numPeople = match[0]
+				}
+
+				// Exclude percentage numbers from the description
+				descWithoutPercentages := strings.ReplaceAll(item.Desc, "%", "")
+				descWithoutPercentages = strings.TrimSpace(descWithoutPercentages)
+
+				writer.Write([]string{company, item.Title, item.Date, item.Url, descWithoutPercentages, numPeople})
+			}
+
+		}
 	}
+
+	fmt.Println("Search results saved to search_results.csv")
 }
