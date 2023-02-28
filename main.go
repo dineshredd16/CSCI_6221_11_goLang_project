@@ -24,8 +24,142 @@ type SearchResult struct {
 
 func main() {
 	// List of company names to search for
-	companies := []string{"Google", "Apple", "Meta", "Microsoft"}
-
+	companies := []string{
+    "Amazon",
+    "Microsoft",
+    "Google",
+    "Apple",
+    "IBM",
+    "Intel",
+    "Cisco",
+    "Oracle",
+    "HewlettPackard",
+    "Dell",
+    "Salesforce",
+    "Adobe",
+    "VMware",
+    "NetApp",
+    "RedHat",
+    "Symantec",
+    "Akamai",
+    "Qualcomm",
+    "Broadcom",
+    "NVIDIA",
+    "Facebook",
+    "Twitter",
+    "LinkedIn",
+    "Uber",
+    "Airbnb",
+    "Dropbox",
+    "Slack",
+    "GitHub",
+    "Zendesk",
+    "Box",
+    "Square",
+    "PagerDuty",
+    "Okta",
+    "Twilio",
+    "DocuSign",
+    "Atlassian",
+    "MongoDB",
+    "Splunk",
+    "Cloudera",
+    "Fortinet",
+    "Palo Alto",
+    "FireEye",
+    "Proofpoint",
+    "Carbon",
+    "Rapid7",
+    "CrowdStrike",
+    "Tanium",
+    "Zscaler",
+    "Netskope",
+    "Okta",
+    "Ping",
+    "Centrify",
+    "Varonis",
+    "Imperva",
+    "F5",
+    "Citrix",
+    "Juniper",
+    "VMware",
+    "Qualys",
+    "ServiceNow",
+    "Alphabet",
+    "Tesla",
+    "Netflix",
+    "PayPal",
+    "Square",
+    "GoDaddy",
+    "DocuSign",
+    "Atlassian",
+    "Twilio",
+    "Zoom",
+    "DocuSign",
+    "DocuWare",
+    "Dynatrace",
+    "Dynavax",
+    "Dynetics",
+    "DynoSense",
+    "Edifecs",
+    "eGain",
+    "Electric",
+    "Eliassen",
+    "Ellie",
+    "Ellucian",
+    "EMC",
+    "Emulex",
+    "Endgame",
+    "EnerNOC",
+    "Enphase",
+    "Entegris",
+    "Entrust",
+    "Epic Games",
+    "Equinix",
+    "ESET",
+    "Esri",
+    "Etsy",
+    "Euclid",
+    "Eventbrite",
+    "Evernote",
+    "Exabeam",
+    "Exela",
+    "Exelon",
+    "Exostar",
+    "Expedia",
+    "Expensify",
+    "ExtraHop",
+    "Extreme",
+    "EY",
+    "EZCorp",
+    "Fabrinet",
+    "Facebook",
+    "FactSet",
+    "FalconStor",
+    "Fandango",
+    "Fannie Mae",
+    "Fastly",
+    "Fidelity",
+    "Fidelity",
+    "FireEye",
+    "First Data",
+    "Fitbit",
+    "Five9",
+    "Flexera",
+    "Flexport",
+    "Foursquare",
+    "Fox",
+    "F5",
+    "Freshworks",
+    "Fuji",
+    "Fujitsu",
+    "Gainsight",
+    "Galactic",
+    "Galvanize",
+    "GameStop",
+    "Gartner",
+    "Genentech",
+	}
 	// Similar words to include in the search query
 	similarWords := []string{"layoff"}
 
@@ -42,7 +176,7 @@ func main() {
 	defer writer.Flush()
 
 	// Write header row to CSV file
-	writer.Write([]string{"Company", "Title", "Date", "URL", "Description"})
+	writer.Write([]string{"Company", "Title", "Date", "URL", "Description", "Employees"})
 
 	// Loop through companies and search for "layoff" and company name on CNBC website
 	for _, company := range companies {
@@ -101,7 +235,17 @@ func main() {
 				descWithoutPercentages := strings.ReplaceAll(item.Desc, "%", "")
 				descWithoutPercentages = strings.TrimSpace(descWithoutPercentages)
 
-				writer.Write([]string{company, item.Title, item.Date, item.Url, descWithoutPercentages, numPeople})
+				count := 0
+				for i, s := range companies {
+					i = i + 1 - 1
+					if (strings.Contains(strings.ToLower(item.Title), strings.ToLower(s))) && (strings.Contains(strings.ToLower(item.Title), strings.ToLower(company))) {
+						count++
+					}
+				}
+
+				if (len(numPeople) > 0) && (count == 1){
+					writer.Write([]string{company, item.Title, item.Date, item.Url, descWithoutPercentages, numPeople})
+				}
 			}
 
 		}
