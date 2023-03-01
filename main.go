@@ -9,6 +9,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 const baseURL = "https://api.queryly.com/cnbc/json.aspx"
@@ -22,7 +23,7 @@ type SearchResult struct {
 	} `json:"results"`
 }
 
-func main() {
+func SearchFunctionMain() {
 	// List of company names to search for
 	companies := []string{"Google", "Apple", "Meta", "Microsoft"}
 
@@ -108,4 +109,14 @@ func main() {
 	}
 
 	fmt.Println("Search results saved to search_results.csv")
+}
+
+func main() {
+	// Create a ticker that ticks every 1 minute
+	ticker := time.NewTicker(1 * time.Minute)
+
+	// Loop through the ticker and execute the function
+	for range ticker.C {
+		SearchFunctionMain()
+	}
 }
