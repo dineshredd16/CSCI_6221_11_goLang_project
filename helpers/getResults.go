@@ -9,6 +9,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 const baseURL = "https://api.queryly.com/cnbc/json.aspx"
@@ -95,7 +96,7 @@ func buildResults(companies []string, similarWords []string, writer *csv.Writer)
 	}
 }
 
-func BuildCSV(companies []string, similarWords []string){
+func buildCSV(companies []string, similarWords []string){
 	file, err := os.Create("searchResult.csv")
 	if err != nil {
 		fmt.Println(err)
@@ -110,4 +111,14 @@ func BuildCSV(companies []string, similarWords []string){
 	defer file.Close()
 	writer.Flush()
 	QueryDuplicatesFromCSV()
+}
+
+func StartScraper(companies []string, similarWords []string) {
+  // Create a ticker that ticks every 1 minute
+  ticker := time.NewTicker(1 * time.Minute)
+
+  // Loop through the ticker and execute the function
+  for range ticker.C {
+    buildCSV(companies, similarWords)
+  }
 }

@@ -1,7 +1,7 @@
 package main
 
 import (
-  "webScraperBackend/helpers"
+	"webScraperBackend/helpers"
 )
 func main() {
   // List of company names to search for
@@ -9,5 +9,5 @@ func main() {
   // Similar words to include in the search query
   similarWords := helpers.SearchQueryTerms()
   // Open CSV file for writing and sending results to it
-  helpers.BuildCSV(companies, similarWords)
+  helpers.StartScraper(companies, similarWords)
 }
