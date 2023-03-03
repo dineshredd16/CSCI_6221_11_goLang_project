@@ -115,7 +115,7 @@ func buildCSV(companies []string, similarWords []string){
 
 func StartScraper(companies []string, similarWords []string) {
   // Create a ticker that ticks every 1 minute
-  ticker := time.NewTicker(1 * time.Minute)
+  ticker := time.NewTicker(1 * time.Second)
 
   // Loop through the ticker and execute the function
   for range ticker.C {
