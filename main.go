@@ -13,4 +13,5 @@ func main() {
   similarWords := helpers.SearchQueryTerms()
   // Open CSV file for writing and sending results to it
   helpers.StartScraper(companies, similarWords)
+  helpers.AirTableSync()
 }
