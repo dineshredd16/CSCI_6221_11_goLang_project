@@ -2,12 +2,14 @@ package main
 
 import (
 	"webScraperBackend/helpers"
+	"webScraperBackend/initializers"
 )
 func main() {
-  // List of company names to search for
+  initializers.LoadEnvVariables()
+  initializers.ConnectToDatabase()
   companies := helpers.CompanyNames()
-  // Similar words to include in the search query
   similarWords := helpers.SearchQueryTerms()
-  // Open CSV file for writing and sending results to it
   helpers.StartScraper(companies, similarWords)
+  helpers.GetTableRecords()
+  helpers.AddTableRecords()
 }
