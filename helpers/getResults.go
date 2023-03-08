@@ -9,7 +9,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
-	"time"
+	// "time"
 )
 
 const baseURL = "https://api.queryly.com/cnbc/json.aspx"
@@ -115,10 +115,10 @@ func buildCSV(companies []string, similarWords []string){
 
 func StartScraper(companies []string, similarWords []string) {
   // Create a ticker that ticks every 1 minute
-  ticker := time.NewTicker(1 * time.Second)
+  // ticker := time.NewTicker(1 * time.Second)
 
   // Loop through the ticker and execute the function
-  for range ticker.C {
+  // for range ticker.C {
     buildCSV(companies, similarWords)
-  }
+  // }
 }
