@@ -22,6 +22,7 @@ func CompanyNames() []string{
         "Qualcomm",
         "Broadcom",
         "NVIDIA",
+        "Meta",
         "Facebook",
         "Twitter",
         "LinkedIn",
