@@ -44,7 +44,7 @@ func buildResults(companies []string, similarWords []string, writer *csv.Writer)
 		}
 
 		// Make request to CNBC API
-		for page := 0; page < 11; page++ {
+		for page := 0; page < 1; page++ {
 			fmt.Printf("Extracting Page# %d for %s\n", page+1, company)
 			queryParams.Set("endindex", fmt.Sprintf("%d", page*100))
 			resp, err := http.Get(baseURL + "?" + queryParams.Encode())
