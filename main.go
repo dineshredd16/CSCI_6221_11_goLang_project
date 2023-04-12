@@ -6,7 +6,6 @@ import (
 )
 func main() {
   initializers.LoadEnvVariables()
-  initializers.ConnectToDatabase()
   companies := helpers.CompanyNames()
   similarWords := helpers.SearchQueryTerms()
   helpers.StartScraper(companies, similarWords)
